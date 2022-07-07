@@ -160,6 +160,12 @@
       <DependentUpon>HotelKusModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\ListaKlientow.datasource" />
+    <None Include="Properties\DataSources\Pokoje.datasource" />
+    <None Include="Properties\DataSources\Rezerwacje.datasource" />
+    <None Include="Properties\DataSources\StatusPokoju.datasource" />
+    <None Include="Properties\DataSources\Widok_Rezerwacje.datasource" />
+    <None Include="Properties\DataSources\Widok_StatusPokoju.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -174,9 +180,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\DataSources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="HotelKusModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
