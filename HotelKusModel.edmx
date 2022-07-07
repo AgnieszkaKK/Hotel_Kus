@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Hotel_KusModelNamespace.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ListaKlientow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Adres" Type="varchar(max)" Nullable="false" />
+          <Property Name="Telefon" Type="varchar" MaxLength="50" />
+          <Property Name="Mail" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pokoje">
+          <Key>
+            <PropertyRef Name="IDPokoju" />
+          </Key>
+          <Property Name="IDPokoju" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumerPokoju" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Pojemnosc" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rezerwacje">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="DataOd" Type="date" Nullable="false" />
+          <Property Name="DataDo" Type="date" Nullable="false" />
+          <Property Name="Pokoj" Type="int" Nullable="false" />
+          <Property Name="Klient" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StatusPokoju">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="StatusPokoju" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Hotel_Kus.dbo.Widok_Rezerwacje' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Widok_Rezerwacje">
+          <Key>
+            <PropertyRef Name="Imie" />
+            <PropertyRef Name="Nazwisko" />
+            <PropertyRef Name="Mail" />
+            <PropertyRef Name="DataOd" />
+            <PropertyRef Name="DataDo" />
+            <PropertyRef Name="NumerPokoju" />
+            <PropertyRef Name="Pojemnosc" />
+          </Key>
+          <Property Name="Imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefon" Type="varchar" MaxLength="50" />
+          <Property Name="Mail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DataOd" Type="date" Nullable="false" />
+          <Property Name="DataDo" Type="date" Nullable="false" />
+          <Property Name="NumerPokoju" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Pojemnosc" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Hotel_Kus.dbo.Widok_StatusPokoju' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Widok_StatusPokoju">
+          <Key>
+            <PropertyRef Name="NumerPokoju" />
+            <PropertyRef Name="Pojemnosc" />
+          </Key>
+          <Property Name="NumerPokoju" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Pojemnosc" Type="int" Nullable="false" />
+          <Property Name="StatusPokoju" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_PokojeStatus">
+          <End Role="StatusPokoju" Type="Self.StatusPokoju" Multiplicity="1" />
+          <End Role="Pokoje" Type="Self.Pokoje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPokoju">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Pokoje">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Klienci">
+          <End Role="ListaKlientow" Type="Self.ListaKlientow" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListaKlientow">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Klient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Pokoje">
+          <End Role="Pokoje" Type="Self.Pokoje" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pokoje">
+              <PropertyRef Name="IDPokoju" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Pokoj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Hotel_KusModelNamespaceStoreContainer">
+          <EntitySet Name="ListaKlientow" EntityType="Self.ListaKlientow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pokoje" EntityType="Self.Pokoje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusPokoju" EntityType="Self.StatusPokoju" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Widok_Rezerwacje" EntityType="Self.Widok_Rezerwacje" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Widok_Rezerwacje].[Imie] AS [Imie], 
+    [Widok_Rezerwacje].[Nazwisko] AS [Nazwisko], 
+    [Widok_Rezerwacje].[Telefon] AS [Telefon], 
+    [Widok_Rezerwacje].[Mail] AS [Mail], 
+    [Widok_Rezerwacje].[DataOd] AS [DataOd], 
+    [Widok_Rezerwacje].[DataDo] AS [DataDo], 
+    [Widok_Rezerwacje].[NumerPokoju] AS [NumerPokoju], 
+    [Widok_Rezerwacje].[Pojemnosc] AS [Pojemnosc]
+    FROM [dbo].[Widok_Rezerwacje] AS [Widok_Rezerwacje]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Widok_StatusPokoju" EntityType="Self.Widok_StatusPokoju" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Widok_StatusPokoju].[NumerPokoju] AS [NumerPokoju], 
+    [Widok_StatusPokoju].[Pojemnosc] AS [Pojemnosc], 
+    [Widok_StatusPokoju].[StatusPokoju] AS [StatusPokoju]
+    FROM [dbo].[Widok_StatusPokoju] AS [Widok_StatusPokoju]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_PokojeStatus" Association="Self.FK_PokojeStatus">
+            <End Role="StatusPokoju" EntitySet="StatusPokoju" />
+            <End Role="Pokoje" EntitySet="Pokoje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="Self.FK_Rezerwacje_Klienci">
+            <End Role="ListaKlientow" EntitySet="ListaKlientow" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Pokoje" Association="Self.FK_Rezerwacje_Pokoje">
+            <End Role="Pokoje" EntitySet="Pokoje" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Hotel_KusModelNamespace" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ListaKlientow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Adres" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="ListaKlientow" ToRole="Rezerwacje" />
+        </EntityType>
+        <EntityType Name="Pokoje">
+          <Key>
+            <PropertyRef Name="IDPokoju" />
+          </Key>
+          <Property Name="IDPokoju" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumerPokoju" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Pojemnosc" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="StatusPokoju" Relationship="Self.FK_PokojeStatus" FromRole="Pokoje" ToRole="StatusPokoju" />
+          <NavigationProperty Name="Rezerwacje" Relationship="Self.FK_Rezerwacje_Pokoje" FromRole="Pokoje" ToRole="Rezerwacje" />
+        </EntityType>
+        <EntityType Name="Rezerwacje">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="DataOd" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DataDo" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Pokoj" Type="Int32" Nullable="false" />
+          <Property Name="Klient" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ListaKlientow" Relationship="Self.FK_Rezerwacje_Klienci" FromRole="Rezerwacje" ToRole="ListaKlientow" />
+          <NavigationProperty Name="Pokoje" Relationship="Self.FK_Rezerwacje_Pokoje" FromRole="Rezerwacje" ToRole="Pokoje" />
+        </EntityType>
+        <EntityType Name="StatusPokoju">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="StatusPokoju1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Pokoje" Relationship="Self.FK_PokojeStatus" FromRole="StatusPokoju" ToRole="Pokoje" />
+        </EntityType>
+        <EntityType Name="Widok_Rezerwacje">
+          <Key>
+            <PropertyRef Name="Imie" />
+            <PropertyRef Name="Nazwisko" />
+            <PropertyRef Name="Mail" />
+            <PropertyRef Name="DataOd" />
+            <PropertyRef Name="DataDo" />
+            <PropertyRef Name="NumerPokoju" />
+            <PropertyRef Name="Pojemnosc" />
+          </Key>
+          <Property Name="Imie" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nazwisko" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Telefon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DataOd" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DataDo" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumerPokoju" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Pojemnosc" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Widok_StatusPokoju">
+          <Key>
+            <PropertyRef Name="NumerPokoju" />
+            <PropertyRef Name="Pojemnosc" />
+          </Key>
+          <Property Name="NumerPokoju" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Pojemnosc" Type="Int32" Nullable="false" />
+          <Property Name="StatusPokoju" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Rezerwacje_Klienci">
+          <End Role="ListaKlientow" Type="Self.ListaKlientow" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListaKlientow">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Klient" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PokojeStatus">
+          <End Role="StatusPokoju" Type="Self.StatusPokoju" Multiplicity="1" />
+          <End Role="Pokoje" Type="Self.Pokoje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusPokoju">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Pokoje">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rezerwacje_Pokoje">
+          <End Role="Pokoje" Type="Self.Pokoje" Multiplicity="1" />
+          <End Role="Rezerwacje" Type="Self.Rezerwacje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pokoje">
+              <PropertyRef Name="IDPokoju" />
+            </Principal>
+            <Dependent Role="Rezerwacje">
+              <PropertyRef Name="Pokoj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entity_Hotel_Kus" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ListaKlientow" EntityType="Self.ListaKlientow" />
+          <EntitySet Name="Pokoje" EntityType="Self.Pokoje" />
+          <EntitySet Name="Rezerwacje" EntityType="Self.Rezerwacje" />
+          <EntitySet Name="StatusPokoju" EntityType="Self.StatusPokoju" />
+          <EntitySet Name="Widok_Rezerwacje" EntityType="Self.Widok_Rezerwacje" />
+          <EntitySet Name="Widok_StatusPokoju" EntityType="Self.Widok_StatusPokoju" />
+          <AssociationSet Name="FK_Rezerwacje_Klienci" Association="Self.FK_Rezerwacje_Klienci">
+            <End Role="ListaKlientow" EntitySet="ListaKlientow" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PokojeStatus" Association="Self.FK_PokojeStatus">
+            <End Role="StatusPokoju" EntitySet="StatusPokoju" />
+            <End Role="Pokoje" EntitySet="Pokoje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rezerwacje_Pokoje" Association="Self.FK_Rezerwacje_Pokoje">
+            <End Role="Pokoje" EntitySet="Pokoje" />
+            <End Role="Rezerwacje" EntitySet="Rezerwacje" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Hotel_KusModelNamespaceStoreContainer" CdmEntityContainer="Entity_Hotel_Kus">
+          <EntitySetMapping Name="ListaKlientow">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.ListaKlientow">
+              <MappingFragment StoreEntitySet="ListaKlientow">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pokoje">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.Pokoje">
+              <MappingFragment StoreEntitySet="Pokoje">
+                <ScalarProperty Name="IDPokoju" ColumnName="IDPokoju" />
+                <ScalarProperty Name="NumerPokoju" ColumnName="NumerPokoju" />
+                <ScalarProperty Name="Pojemnosc" ColumnName="Pojemnosc" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rezerwacje">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.Rezerwacje">
+              <MappingFragment StoreEntitySet="Rezerwacje">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DataOd" ColumnName="DataOd" />
+                <ScalarProperty Name="DataDo" ColumnName="DataDo" />
+                <ScalarProperty Name="Pokoj" ColumnName="Pokoj" />
+                <ScalarProperty Name="Klient" ColumnName="Klient" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusPokoju">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.StatusPokoju">
+              <MappingFragment StoreEntitySet="StatusPokoju">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="StatusPokoju1" ColumnName="StatusPokoju" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Widok_Rezerwacje">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.Widok_Rezerwacje">
+              <MappingFragment StoreEntitySet="Widok_Rezerwacje">
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="DataOd" ColumnName="DataOd" />
+                <ScalarProperty Name="DataDo" ColumnName="DataDo" />
+                <ScalarProperty Name="NumerPokoju" ColumnName="NumerPokoju" />
+                <ScalarProperty Name="Pojemnosc" ColumnName="Pojemnosc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Widok_StatusPokoju">
+            <EntityTypeMapping TypeName="Hotel_KusModelNamespace.Widok_StatusPokoju">
+              <MappingFragment StoreEntitySet="Widok_StatusPokoju">
+                <ScalarProperty Name="NumerPokoju" ColumnName="NumerPokoju" />
+                <ScalarProperty Name="Pojemnosc" ColumnName="Pojemnosc" />
+                <ScalarProperty Name="StatusPokoju" ColumnName="StatusPokoju" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
